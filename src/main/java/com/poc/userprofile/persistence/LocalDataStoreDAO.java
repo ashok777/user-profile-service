@@ -39,9 +39,7 @@ public class LocalDataStoreDAO implements UserProfileDAO {
 			map = 	objectMapper.readValue(new File(localDataStoreFilePath),mapType);
 		}
 		
-		
 		return map;	
-		
 	}
 	
 	public void   persistUserProfiles(Map<String,List<UserProfile>> userProfilesMap) throws Exception{
