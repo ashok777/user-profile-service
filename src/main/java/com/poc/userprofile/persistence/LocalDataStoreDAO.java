@@ -1,7 +1,7 @@
 package com.poc.userprofile.persistence;
 
 import java.io.File;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +27,18 @@ public class LocalDataStoreDAO implements UserProfileDAO {
 	
 	public Map<String,List<UserProfile>> readUserProfiles() throws Exception{
 		
-		JavaType mapValueType =	objectMapper.getTypeFactory().constructCollectionType(List.class, UserProfile.class);
-        JavaType mapKeyType = objectMapper.getTypeFactory().constructType(String.class);
-		JavaType mapType = 	objectMapper.getTypeFactory().constructMapType(Map.class, mapKeyType, mapValueType);	
-
-		Map<String, List<UserProfile>> map = 	objectMapper.readValue(new File(localDataStoreFilePath),mapType);
+		Map<String, List<UserProfile>> map = new HashMap<String, List<UserProfile>>();
+		
+		File dataFile = new File(localDataStoreFilePath);
+		if (dataFile.exists()){
+			
+			JavaType mapValueType =	objectMapper.getTypeFactory().constructCollectionType(List.class, UserProfile.class);
+	        JavaType mapKeyType = objectMapper.getTypeFactory().constructType(String.class);
+			JavaType mapType = 	objectMapper.getTypeFactory().constructMapType(Map.class, mapKeyType, mapValueType);	
+			
+			map = 	objectMapper.readValue(new File(localDataStoreFilePath),mapType);
+		}
+		
 		
 		return map;	
 		
