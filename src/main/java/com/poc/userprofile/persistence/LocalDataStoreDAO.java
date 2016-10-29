@@ -1,6 +1,7 @@
 package com.poc.userprofile.persistence;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,27 +26,26 @@ public class LocalDataStoreDAO implements UserProfileDAO {
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
-	public Map<String,List<UserProfile>> readUserProfiles() throws Exception{
+	public List<UserProfile> readUserProfiles() throws Exception{
 		
-		Map<String, List<UserProfile>> map = new HashMap<String, List<UserProfile>>();
+		List<UserProfile> userProfiles = new ArrayList<UserProfile>();
 		
 		File dataFile = new File(localDataStoreFilePath);
 		if (dataFile.exists()){
-			
-			JavaType mapValueType =	objectMapper.getTypeFactory().constructCollectionType(List.class, UserProfile.class);
-	        JavaType mapKeyType = objectMapper.getTypeFactory().constructType(String.class);
-			JavaType mapType = 	objectMapper.getTypeFactory().constructMapType(Map.class, mapKeyType, mapValueType);	
-			
-			map = 	objectMapper.readValue(new File(localDataStoreFilePath),mapType);
+
+			JavaType listType =	objectMapper.getTypeFactory().constructCollectionType(List.class, UserProfile.class);
+			userProfiles = 	objectMapper.readValue(new File(localDataStoreFilePath), listType);
 		}
 		
-		return map;	
+		return userProfiles;	
 	}
 	
-	public void   persistUserProfiles(Map<String,List<UserProfile>> userProfilesMap) throws Exception{
+	public void   persistUserProfiles(List<UserProfile> newProfiles) throws Exception{
 	
+		List<UserProfile> userProfiles = readUserProfiles();
+		userProfiles.addAll(newProfiles);
 		objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-		objectMapper.writeValue(new File(localDataStoreFilePath), userProfilesMap);
+		objectMapper.writeValue(new File(localDataStoreFilePath), userProfiles);
 		
 	}
 }

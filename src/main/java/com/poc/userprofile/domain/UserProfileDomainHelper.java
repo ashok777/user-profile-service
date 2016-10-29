@@ -24,15 +24,14 @@ public class UserProfileDomainHelper {
 	public List<UserProfile> resolveAddressesAndSave(String apiKey, List<UserProfile> userProfiles) throws Exception{
 		
 		List<UserProfile> resolvedProfiles = resolveAddresses(apiKey, userProfiles);
-		Map<String, List<UserProfile>> userProfilesMap = repackageUserProfiles(resolvedProfiles);
-		
-		userProfileDAO.persistUserProfiles(userProfilesMap);
+		userProfileDAO.persistUserProfiles(resolvedProfiles);
 		return resolvedProfiles;
 		
 	}
 	public List<UserProfile> lookupUsersForPostalCode(String postalCode) throws Exception{
 		
-		Map<String, List<UserProfile>> userProfilesMap  = userProfileDAO.readUserProfiles();
+		List<UserProfile> userProfiles  = userProfileDAO.readUserProfiles();
+		Map<String, List<UserProfile>> userProfilesMap = reorganizeUserProfiles(userProfiles);
 		
 		List<UserProfile> listOfProfiles = userProfilesMap.get(postalCode);
 		if (listOfProfiles == null){
@@ -55,7 +54,7 @@ public class UserProfileDomainHelper {
 		}
 		return userProfiles;
 	}
-	private Map<String, List<UserProfile>> repackageUserProfiles(List<UserProfile> userProfiles){
+	private Map<String, List<UserProfile>> reorganizeUserProfiles(List<UserProfile> userProfiles){
 		
 		Map<String, List<UserProfile>> mapOfLists = new HashMap<String, List<UserProfile>>();
 		List<UserProfile> listOfProfiles = null;
