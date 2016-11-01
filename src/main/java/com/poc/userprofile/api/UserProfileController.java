@@ -32,7 +32,7 @@ public class UserProfileController {
    			                                              @RequestBody List<UserProfile> userProfiles) throws Exception{
      		
     	userProfiles = userProfileDomainHelper.resolveAddressesAndSave(apiKey, userProfiles);    	
-        return new ResponseEntity<List<UserProfile>>(userProfiles, HttpStatus.OK);
+        return new ResponseEntity<List<UserProfile>>(userProfiles, HttpStatus.CREATED);
   
    	}
 }
