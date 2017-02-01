@@ -26,7 +26,7 @@ public class LocalDataStoreDAO implements UserProfileDAO {
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
-	public List<UserProfile> readUserProfiles() throws Exception{
+	public synchronized List<UserProfile> readUserProfiles() throws Exception{
 		
 		List<UserProfile> userProfiles = new ArrayList<UserProfile>();
 		
@@ -40,7 +40,7 @@ public class LocalDataStoreDAO implements UserProfileDAO {
 		return userProfiles;	
 	}
 	
-	public void   persistUserProfiles(List<UserProfile> newProfiles) throws Exception{
+	public synchronized void   persistUserProfiles(List<UserProfile> newProfiles) throws Exception{
 	
 		List<UserProfile> userProfiles = readUserProfiles();
 		userProfiles.addAll(newProfiles);
